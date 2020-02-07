@@ -1,26 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {connect} from 'react-redux'
+import {increment, decrement, reset} from './actions/count'
+import Btn from './btn'
+import Generate from './components/generate'
+import RandomNumbers from './components/RandomNumbers'
+import ListArticles from './components/articles/List'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+function App(props) {
+  /* console.log(props)
+  props.dispatch(increment()) */
+
+  function resetTheValue(props) {
+    const decision=window.confirm("Are you sure, you want to reset ?")
+    if(decision) {
+      props.dispatch(reset())
+    }
+  }
+
+  return (    
+    <div>
+      <h1>Redux Playarea</h1>
+      <h2>{props.count}</h2>
+      <button onClick={()=> {
+        props.dispatch(increment())}}>+</button>
+        <Btn />
+        
+        
+        <button onClick={()=> {
+        props.dispatch(decrement())}}>-</button>
+        <button onClick={()=> {
+        resetTheValue(props)}}>Reset</button>
+        <hr />
+        <Generate />
+        <hr />
+        <RandomNumbers />
+        <hr />
+        <ListArticles />
     </div>
-  );
+  )
 }
 
-export default App;
+/* const wrappedComponent=connect()(App)
+
+export default wrappedComponent; */
+
+const mapStateToProps=(state)=> {
+  return {
+    count: state.count
+  }
+}
+
+export default connect(mapStateToProps)(App)
